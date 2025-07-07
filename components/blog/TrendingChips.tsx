@@ -13,16 +13,26 @@ interface TrendingChipsProps {
 
 export default function TrendingChips({ activeTag, setActiveTag }: TrendingChipsProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Story Categories</h3>
-      <div className="flex flex-wrap gap-3">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <h3 className="text-sm font-semibold text-gray-900 mb-3">Filter by Category</h3>
+      <div className="flex flex-wrap gap-2">
+        <button
+          className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+            activeTag === '' 
+              ? "bg-blue-600 text-white" 
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+          onClick={() => setActiveTag('')}
+        >
+          All Stories
+        </button>
         {chips.map(tag => (
           <button
             key={tag}
-            className={`px-4 py-2 rounded-full border font-medium whitespace-nowrap transition-all ${
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
               activeTag === tag 
-                ? "bg-blue-600 text-white border-blue-600 shadow-sm" 
-                : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 hover:border-gray-300"
+                ? "bg-blue-600 text-white" 
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
             onClick={() => setActiveTag(activeTag === tag ? "" : tag)}
           >

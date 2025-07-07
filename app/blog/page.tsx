@@ -4,7 +4,7 @@ import BlogTopBar from "@/components/blog/BlogTopBar";
 import TrendingChips from "@/components/blog/TrendingChips";
 import BlogGrid from "@/components/blog/BlogGrid";
 import { BLOGS } from "./blogs-data";
-import { PlusCircle, Heart, Users, Calendar } from "lucide-react";
+import { PlusCircle, Heart, Users, Calendar, TrendingUp, Clock, Eye } from "lucide-react";
 import Link from "next/link";
 
 export default function BlogPage() {
@@ -12,7 +12,7 @@ export default function BlogPage() {
   const [activeTag, setActiveTag] = useState('');
   const [sortBy, setSortBy] = useState('Latest');
   const [page, setPage] = useState(1);
-  const blogsPerPage = 9;
+  const blogsPerPage = 12;
 
   // Filtering and sorting
   let filteredBlogs = BLOGS.filter(b =>
@@ -31,181 +31,248 @@ export default function BlogPage() {
   // Reset to page 1 on search/filter change
   useEffect(() => { setPage(1); }, [search, activeTag, sortBy]);
 
+  // Get featured stories (top 3 most viewed)
+  const featuredStories = BLOGS.sort((a, b) => b.views - a.views).slice(0, 3);
+  const trendingStories = BLOGS.filter(b => b.views > 800).slice(0, 4);
+
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl lg:text-5xl font-bold text-gray-900">Stories of Hope & Healing</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Every rescue, every recovery, every life saved has a story. Read about our animals, volunteers, and the impact we make together at IIT Kharagpur.
-        </p>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-2xl mx-auto">
-          <p className="text-blue-800 font-medium">
-            📱 Follow our daily updates: @animal__welfare_iitkgp
-          </p>
-        </div>
-      </div>
-
-      {/* Impact Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="text-center">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Heart className="w-6 h-6 text-blue-600" />
-          </div>
-          <div className="text-2xl font-bold text-gray-900">460+</div>
-          <div className="text-sm text-gray-600">Dogs Sterilized</div>
-        </div>
-        <div className="text-center">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Users className="w-6 h-6 text-green-600" />
-          </div>
-          <div className="text-2xl font-bold text-gray-900">3,000+</div>
-          <div className="text-sm text-gray-600">Vaccinations Given</div>
-        </div>
-        <div className="text-center">
-          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Calendar className="w-6 h-6 text-orange-600" />
-          </div>
-          <div className="text-2xl font-bold text-gray-900">6+</div>
-          <div className="text-sm text-gray-600">Years of Service</div>
-        </div>
-        <div className="text-center">
-          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <Heart className="w-6 h-6 text-purple-600" />
-          </div>
-          <div className="text-2xl font-bold text-gray-900">24/7</div>
-          <div className="text-sm text-gray-600">Emergency Response</div>
-        </div>
-      </div>
-
-      {/* Top Bar with Search and Filters */}
-      <BlogTopBar
-        search={search}
-        setSearch={setSearch}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-      />
-
-      {/* Trending Tags */}
-      <TrendingChips activeTag={activeTag} setActiveTag={setActiveTag} />
-
-      {/* Featured Story */}
-      {!search && !activeTag && (
-        <div className="card bg-gradient-to-r from-blue-50 to-green-50 border-blue-200">
-          <div className="card-body">
-            <div className="flex items-center mb-4">
-              <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full mr-3">
-                Featured Story
-              </span>
-              <span className="text-sm text-gray-600">Most Recent</span>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+    <div className="min-h-screen bg-gray-50">
+      {/* MSN-style Header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-4">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                  {BLOGS[0].title}
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  {BLOGS[0].description}
-                </p>
-                <div className="flex items-center text-sm text-gray-500 mb-4">
-                  <span>{BLOGS[0].author}</span>
-                  <span className="mx-2">•</span>
-                  <span>{new Date(BLOGS[0].date).toLocaleDateString()}</span>
-                  <span className="mx-2">•</span>
-                  <span>{BLOGS[0].views} views</span>
+                <h1 className="text-3xl font-bold text-gray-900">Animal Welfare Stories</h1>
+                <p className="text-gray-600 mt-1">Latest news, rescue stories, and updates from IIT Kharagpur</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-gray-500">
+                  <Clock className="w-4 h-4 inline mr-1" />
+                  Updated {new Date().toLocaleDateString()}
                 </div>
                 <Link
-                  href={`/blog/${BLOGS[0].id}`}
-                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                  href="/blog/new"
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Read Full Story
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Write Story
                 </Link>
               </div>
-              <div>
-                <img 
-                  src={BLOGS[0].image} 
-                  alt={BLOGS[0].title}
-                  className="w-full h-64 object-cover rounded-lg shadow-lg"
-                />
-              </div>
+            </div>
+            
+            {/* MSN-style Navigation Tabs */}
+            <div className="flex space-x-8 border-b border-gray-200">
+              <button className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium">
+                All Stories
+              </button>
+              <button className="pb-3 text-gray-600 hover:text-gray-900 font-medium">
+                Rescue Stories
+              </button>
+              <button className="pb-3 text-gray-600 hover:text-gray-900 font-medium">
+                Medical Care
+              </button>
+              <button className="pb-3 text-gray-600 hover:text-gray-900 font-medium">
+                Success Stories
+              </button>
+              <button className="pb-3 text-gray-600 hover:text-gray-900 font-medium">
+                Behind the Scenes
+              </button>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Create Blog Button */}
-      <div className="flex justify-end">
-        <Link
-          href="/blog/new"
-          className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm"
-        >
-          <PlusCircle className="w-4 h-4 mr-2" />
-          Share Your Story
-        </Link>
       </div>
 
-      {/* Blog Grid */}
-      <div className="max-w-7xl mx-auto">
-        <BlogGrid blogs={pagedBlogs} />
-        
-        {/* Pagination */}
-        {pageCount > 1 && (
-          <div className="flex justify-center mt-12 gap-2">
-            <button
-              onClick={() => setPage(Math.max(1, page - 1))}
-              disabled={page === 1}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Previous
-            </button>
-            {Array.from({ length: pageCount }).map((_, idx) => (
-              <button
-                key={idx}
-                className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                  page === idx + 1 
-                    ? "bg-blue-600 text-white" 
-                    : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                }`}
-                onClick={() => setPage(idx + 1)}
-              >
-                {idx + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => setPage(Math.min(pageCount, page + 1))}
-              disabled={page === pageCount}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-            </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* MSN-style Featured Section */}
+        <div className="mb-8">
+          <div className="flex items-center mb-6">
+            <TrendingUp className="w-5 h-5 text-red-600 mr-2" />
+            <h2 className="text-xl font-bold text-gray-900">Featured Stories</h2>
           </div>
-        )}
-      </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Featured Story */}
+            <div className="lg:col-span-2">
+              <div className="relative h-80 rounded-lg overflow-hidden group cursor-pointer">
+                <img 
+                  src={featuredStories[0]?.image} 
+                  alt={featuredStories[0]?.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="px-2 py-1 bg-red-600 text-xs font-medium rounded">FEATURED</span>
+                    <span className="text-xs opacity-75">{featuredStories[0]?.author}</span>
+                    <span className="text-xs opacity-75">•</span>
+                    <span className="text-xs opacity-75">{new Date(featuredStories[0]?.date).toLocaleDateString()}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2 line-clamp-2">{featuredStories[0]?.title}</h3>
+                  <p className="text-sm opacity-90 line-clamp-2">{featuredStories[0]?.description}</p>
+                  <div className="flex items-center mt-3 text-xs opacity-75">
+                    <Eye className="w-3 h-3 mr-1" />
+                    {featuredStories[0]?.views} views
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      {/* Call to Action */}
-      <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 text-center border border-blue-200">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Be Part of Our Story</h2>
-        <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-          Every volunteer, donor, and supporter becomes part of our mission. Your story of compassion could inspire others to join our cause.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/blog/new"
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            <PlusCircle className="w-5 h-5 mr-2" />
-            Share Your Experience
-          </Link>
-          <Link
-            href="/help"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Join Our Mission
-          </Link>
+            {/* Side Featured Stories */}
+            <div className="space-y-4">
+              {featuredStories.slice(1, 3).map((story, idx) => (
+                <div key={story.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="flex">
+                    <img 
+                      src={story.image} 
+                      alt={story.title}
+                      className="w-24 h-24 object-cover flex-shrink-0"
+                    />
+                    <div className="p-4 flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        {story.tags.slice(0, 1).map(tag => (
+                          <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <h4 className="font-semibold text-sm line-clamp-2 mb-1">{story.title}</h4>
+                      <div className="flex items-center text-xs text-gray-500">
+                        <span>{story.author}</span>
+                        <span className="mx-1">•</span>
+                        <span>{new Date(story.date).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="mt-6 text-sm text-gray-600">
-          <p>📱 Follow our daily updates: @animal__welfare_iitkgp</p>
-          <p>📞 24/7 Emergency Response • Registered NGO (2025)</p>
+
+        {/* Trending Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <TrendingUp className="w-5 h-5 text-orange-600 mr-2" />
+              <h2 className="text-xl font-bold text-gray-900">Trending Now</h2>
+            </div>
+            <Link href="#" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+              View all trending →
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {trendingStories.map((story, idx) => (
+              <div key={story.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <img 
+                  src={story.image} 
+                  alt={story.title}
+                  className="w-full h-32 object-cover"
+                />
+                <div className="p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">
+                      TRENDING
+                    </span>
+                  </div>
+                  <h4 className="font-semibold text-sm line-clamp-2 mb-2">{story.title}</h4>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>{story.author}</span>
+                    <div className="flex items-center">
+                      <Eye className="w-3 h-3 mr-1" />
+                      {story.views}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <BlogTopBar
+          search={search}
+          setSearch={setSearch}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+        />
+
+        {/* Category Chips */}
+        <div className="my-6">
+          <TrendingChips activeTag={activeTag} setActiveTag={setActiveTag} />
+        </div>
+
+        {/* All Stories Grid */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">All Stories</h2>
+            <div className="text-sm text-gray-500">
+              {filteredBlogs.length} stories found
+            </div>
+          </div>
+          
+          <BlogGrid blogs={pagedBlogs} />
+          
+          {/* Pagination */}
+          {pageCount > 1 && (
+            <div className="flex justify-center mt-12 gap-2">
+              <button
+                onClick={() => setPage(Math.max(1, page - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+              {Array.from({ length: Math.min(5, pageCount) }).map((_, idx) => {
+                const pageNum = page <= 3 ? idx + 1 : page - 2 + idx;
+                if (pageNum > pageCount) return null;
+                return (
+                  <button
+                    key={pageNum}
+                    className={`w-10 h-10 rounded-lg font-medium transition-colors ${
+                      page === pageNum 
+                        ? "bg-blue-600 text-white" 
+                        : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+                    }`}
+                    onClick={() => setPage(pageNum)}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setPage(Math.min(pageCount, page + 1))}
+                disabled={page === pageCount}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Impact Stats */}
+        <div className="bg-white rounded-lg p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Our Impact in Numbers</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-blue-600">460+</div>
+              <div className="text-sm text-gray-600">Dogs Sterilized</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-green-600">3,000+</div>
+              <div className="text-sm text-gray-600">Vaccinations Given</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-orange-600">320</div>
+              <div className="text-sm text-gray-600">Daily Feeding</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-purple-600">24/7</div>
+              <div className="text-sm text-gray-600">Emergency Response</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

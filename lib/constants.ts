@@ -20,6 +20,7 @@ export const APP_CONFIG = {
 export const NAVIGATION_LINKS = [
   { label: 'Home', href: '/', icon: 'Home' },
   { label: 'Adopt', href: '/adopt', icon: 'Heart' },
+  { label: 'Store', href: '/store', icon: 'ShoppingBag' },
   { label: 'Donate', href: '/donate', icon: 'DollarSign' },
   { label: 'Stories', href: '/blog', icon: 'BookOpen' },
   { label: 'Help', href: '/help', icon: 'HelpCircle' }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Heart, DollarSign, BookOpen, HelpCircle, User, Crown } from 'lucide-react'
+import { Home, Heart, DollarSign, BookOpen, HelpCircle, User, Crown, ShoppingBag } from 'lucide-react'
 import { NAVIGATION_LINKS, APP_CONFIG } from '@/lib/constants'
 
 const iconMap = {
@@ -11,7 +11,8 @@ const iconMap = {
   DollarSign,
   BookOpen,
   HelpCircle,
-  Crown
+  Crown,
+  ShoppingBag
 }
 
 interface NavigationProps {
@@ -33,6 +34,7 @@ export default function Navigation({ onItemClick }: NavigationProps) {
         const Icon = iconMap[link.icon as keyof typeof iconMap]
         const isActive = pathname === link.href
         const isClubhouse = link.href === '/dashboard'
+        const isStore = link.href === '/store'
         
         return (
           <Link
@@ -43,6 +45,8 @@ export default function Navigation({ onItemClick }: NavigationProps) {
               isActive 
                 ? isClubhouse
                   ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white border border-orange-300 shadow-lg'
+                  : isStore
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white border border-purple-300 shadow-lg'
                   : 'bg-blue-50 text-blue-700 border border-blue-200 shadow-sm'
                 : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm hover:-translate-y-0.5'
             }`}
@@ -52,6 +56,8 @@ export default function Navigation({ onItemClick }: NavigationProps) {
               isActive 
                 ? isClubhouse
                   ? 'text-white animate-pulse'
+                  : isStore
+                  ? 'text-white animate-pulse'
                   : 'text-blue-600'
                 : 'text-gray-500 group-hover:text-gray-700 group-hover:scale-110'
             }`} />
@@ -59,6 +65,11 @@ export default function Navigation({ onItemClick }: NavigationProps) {
             {isClubhouse && (
               <span className="ml-auto px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full animate-pulse">
                 NEW
+              </span>
+            )}
+            {isStore && (
+              <span className="ml-auto px-2 py-1 bg-green-400 text-green-900 text-xs font-bold rounded-full animate-pulse">
+                SHOP
               </span>
             )}
           </Link>

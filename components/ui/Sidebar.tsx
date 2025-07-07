@@ -28,46 +28,74 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside className="fixed left-0 top-0 w-80 h-full bg-white border-r border-gray-200 z-40 shadow-sm animate-slideInLeft overflow-y-auto">
       <div className="p-6">
-        {/* Enhanced Header with Better Logo Visibility */}
+        {/* Enhanced 3D Logo Header */}
         <div className="flex items-center justify-between mb-8 animate-fadeInUp">
           <div className="flex items-center space-x-3 flex-1">
-            {/* Improved Logo Container */}
-            <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl flex items-center justify-center animate-float shadow-lg border-2 border-white">
-              {/* High-quality dog silhouette as logo */}
-              <div className="w-10 h-10 flex items-center justify-center">
-                <svg 
-                  viewBox="0 0 24 24" 
-                  fill="currentColor" 
-                  className="w-8 h-8 text-white drop-shadow-sm"
-                >
-                  <path d="M4.151 12.114c0 .456.371.827.827.827s.827-.371.827-.827-.371-.827-.827-.827-.827.371-.827.827zm14.844 0c0 .456.371.827.827.827s.827-.371.827-.827-.371-.827-.827-.827-.827.371-.827.827zM12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8 0-1.168.258-2.275.714-3.272C6.034 8.404 7.515 8 9.143 8c.714 0 1.429.143 2.143.286.357.071.714.143 1.071.143s.714-.071 1.071-.143C14.143 8.143 14.857 8 15.571 8c1.628 0 3.109.404 4.429.728C20.456 9.725 20.714 10.832 20.714 12c0 4.411-3.589 8-8 8z"/>
-                  <path d="M8.5 14.5c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5-.672-1.5-1.5-1.5-1.5.672-1.5 1.5zm4 0c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5-.672-1.5-1.5-1.5-1.5.672-1.5 1.5z"/>
-                </svg>
+            {/* 3D Animated Logo Container */}
+            <div className="relative w-16 h-16 perspective-1000">
+              <div className="relative w-full h-full transform-style-preserve-3d animate-3d-rotate hover:animate-3d-bounce">
+                {/* Main Logo Face */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-green-500 to-blue-600 rounded-xl flex items-center justify-center shadow-2xl border-2 border-white transform-gpu">
+                  {/* High-quality 3D dog silhouette */}
+                  <div className="relative w-10 h-10 flex items-center justify-center">
+                    <svg 
+                      viewBox="0 0 100 100" 
+                      fill="currentColor" 
+                      className="w-8 h-8 text-white drop-shadow-lg transform hover:scale-110 transition-transform duration-300"
+                    >
+                      {/* Detailed dog silhouette */}
+                      <path d="M50 15c-8 0-15 4-19 10-2-1-4-1-6 0-3 2-4 6-2 9l2 3c-1 2-1 4 0 6 1 3 3 5 6 6v8c0 8 6 14 14 14h10c8 0 14-6 14-14v-8c3-1 5-3 6-6 1-2 1-4 0-6l2-3c2-3 1-7-2-9-2-1-4-1-6 0-4-6-11-10-19-10z"/>
+                      {/* Eyes */}
+                      <circle cx="42" cy="35" r="3" fill="rgba(0,0,0,0.8)"/>
+                      <circle cx="58" cy="35" r="3" fill="rgba(0,0,0,0.8)"/>
+                      {/* Nose */}
+                      <ellipse cx="50" cy="45" rx="2" ry="3" fill="rgba(0,0,0,0.9)"/>
+                      {/* Mouth */}
+                      <path d="M50 48 Q45 52 40 50 Q45 55 50 53 Q55 55 60 50 Q55 52 50 48" fill="rgba(0,0,0,0.7)"/>
+                    </svg>
+                    
+                    {/* 3D Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-300/30 to-orange-300/30 rounded-full blur-sm animate-pulse"></div>
+                  </div>
+                  
+                  {/* Floating Paw Prints */}
+                  <div className="absolute -top-2 -right-2 w-4 h-4 text-yellow-300 animate-float-paw">
+                    🐾
+                  </div>
+                  <div className="absolute -bottom-1 -left-1 w-3 h-3 text-orange-300 animate-float-paw-delayed">
+                    🐾
+                  </div>
+                </div>
+                
+                {/* 3D Shadow/Depth Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-green-700 rounded-xl transform translate-x-1 translate-y-1 -z-10 opacity-50"></div>
               </div>
-              {/* Animated paw prints around logo */}
-              <div className="absolute -top-1 -right-1 w-3 h-3 text-yellow-300 animate-pulse">
-                🐾
-              </div>
+              
+              {/* Animated Ring Around Logo */}
+              <div className="absolute inset-0 border-2 border-blue-400/50 rounded-xl animate-spin-slow"></div>
+              <div className="absolute inset-1 border border-green-400/30 rounded-lg animate-reverse-spin"></div>
             </div>
             
-            {/* Enhanced Text with Better Spacing */}
+            {/* Enhanced Text with Better Typography */}
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold text-gray-900 leading-tight truncate">
+              <h1 className="text-xl font-bold text-gray-900 leading-tight truncate bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 {APP_CONFIG.name}
               </h1>
-              <p className="text-xs text-gray-500 leading-tight mt-1">
+              <p className="text-xs text-gray-500 leading-tight mt-1 font-medium">
                 {APP_CONFIG.tagline}
               </p>
+              {/* Animated Underline */}
+              <div className="w-full h-0.5 bg-gradient-to-r from-blue-400 to-green-400 mt-1 animate-pulse"></div>
             </div>
           </div>
           
-          {/* Close Button with Better Positioning */}
+          {/* Enhanced Close Button */}
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-300 hover:scale-110 ml-2 flex-shrink-0"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-300 hover:scale-110 ml-2 flex-shrink-0 group"
             aria-label="Close sidebar"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors" />
           </button>
         </div>
 

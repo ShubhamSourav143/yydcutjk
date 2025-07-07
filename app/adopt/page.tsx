@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Heart, Shield, Users, ArrowRight } from 'lucide-react';
+import { Heart, Shield, Users, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import VideoSection from '@/components/adopt/VideoSection';
 import PhotoCarousel from '@/components/adopt/PhotoCarousel';
 import { dogs, cats } from './data';
 import Link from 'next/link';
-
 
 const supportOptions = [
   {
@@ -41,6 +40,8 @@ const supportOptions = [
 
 export default function AdoptPage() {
   const [showThankYou, setShowThankYou] = useState(false);
+  const [showAllDogs, setShowAllDogs] = useState(false);
+  const [showAllCats, setShowAllCats] = useState(false);
 
   const handleSupportClick = (option: any) => {
     setShowThankYou(true);
@@ -48,7 +49,6 @@ export default function AdoptPage() {
   };
 
   const handleKnowMore = (option: any) => {
-    // Navigate to relevant page or show more details
     window.location.href = `/adopt?program=${option.title.toLowerCase().replace(/\s+/g, '-')}`;
   };
 
@@ -80,14 +80,14 @@ export default function AdoptPage() {
       <PhotoCarousel 
         animals={dogs}
         title="🐕 Dogs Looking for Homes"
-        seeMoreLink="/adopt#all-dogs"
+        seeMoreLink="#dogs-section"
       />
 
       {/* Section 4: Cat Photo Carousel */}
       <PhotoCarousel 
         animals={cats}
         title="🐱 Cats Looking for Homes"
-        seeMoreLink="/adopt#all-cats"
+        seeMoreLink="#cats-section"
       />
 
       {/* Section 5: Why to Adopt */}
@@ -198,84 +198,106 @@ export default function AdoptPage() {
         </div>
       </section>
 
-      {/* All Dogs Section */}
-      <section id="all-dogs" className="space-y-8">
+      {/* Expandable Dogs Section */}
+      <section id="dogs-section" className="space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">🐕 All Dogs Available for Adoption</h2>
-          <p className="text-lg text-gray-600">
-            Browse through all our wonderful dogs looking for their forever homes
-          </p>
+          <button
+            onClick={() => setShowAllDogs(!showAllDogs)}
+            className="inline-flex items-center space-x-2 text-3xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
+          >
+            <span>🐕 All Dogs Available for Adoption</span>
+            {showAllDogs ? <ChevronUp className="w-8 h-8" /> : <ChevronDown className="w-8 h-8" />}
+          </button>
+          {showAllDogs && (
+            <p className="text-lg text-gray-600 mt-4">
+              Browse through all our wonderful dogs looking for their forever homes
+            </p>
+          )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {dogs.map((dog) => (
-            <div key={dog.id} className="card hover-lift">
-              <div className="relative overflow-hidden rounded-t-xl h-48">
-                <img 
-                  src={dog.images[0]} 
-                  alt={dog.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 left-3">
-                  <span className="text-2xl">🐕</span>
+        
+        {showAllDogs && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeInUp">
+            {dogs.map((dog) => (
+              <div key={dog.id} className="card hover-lift">
+                <div className="relative overflow-hidden rounded-t-xl h-48">
+                  <img 
+                    src={dog.images[0]} 
+                    alt={dog.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="text-2xl">🐕</span>
+                  </div>
+                </div>
+                <div className="card-body p-4">
+                  <h3 className="font-bold text-gray-900 mb-2">Name: {dog.name}</h3>
+                  <div className="space-y-1 text-sm text-gray-600 mb-3">
+                    <p>Age: {dog.age}</p>
+                    <p>Gender: {dog.gender}</p>
+                    <p>Breed: {dog.breed}</p>
+                  </div>
+                  <Link
+                    href={`/adopt/${dog.id}`}
+                    className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 text-center block text-sm"
+                  >
+                    Adopt Now
+                  </Link>
                 </div>
               </div>
-              <div className="card-body p-4">
-                <h3 className="font-bold text-gray-900 mb-2">Name: {dog.name}</h3>
-                <div className="space-y-1 text-sm text-gray-600 mb-3">
-                  <p>Age: {dog.age}</p>
-                  <p>Gender: {dog.gender}</p>
-                  <p>Breed: {dog.breed}</p>
-                </div>
-                <Link
-                  href={`/adopt/${dog.id}`}
-                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 text-center block text-sm"
-                >
-                  Adopt Now
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* All Cats Section */}
-      <section id="all-cats" className="space-y-8">
+      {/* Expandable Cats Section */}
+      <section id="cats-section" className="space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">🐱 All Cats Available for Adoption</h2>
-          <p className="text-lg text-gray-600">
-            Discover all our beautiful cats ready to bring joy to your home
-          </p>
+          <button
+            onClick={() => setShowAllCats(!showAllCats)}
+            className="inline-flex items-center space-x-2 text-3xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
+          >
+            <span>🐱 All Cats Available for Adoption</span>
+            {showAllCats ? <ChevronUp className="w-8 h-8" /> : <ChevronDown className="w-8 h-8" />}
+          </button>
+          {showAllCats && (
+            <p className="text-lg text-gray-600 mt-4">
+              Discover all our beautiful cats ready to bring joy to your home
+            </p>
+          )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {cats.map((cat) => (
-            <div key={cat.id} className="card hover-lift">
-              <div className="relative overflow-hidden rounded-t-xl h-48">
-                <img 
-                  src={cat.images[0]} 
-                  alt={cat.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-3 left-3">
-                  <span className="text-2xl">🐱</span>
+        
+        {showAllCats && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeInUp">
+            {cats.map((cat) => (
+              <div key={cat.id} className="card hover-lift">
+                <div className="relative overflow-hidden rounded-t-xl h-48">
+                  <img 
+                    src={cat.images[0]} 
+                    alt={cat.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="text-2xl">🐱</span>
+                  </div>
+                </div>
+                <div className="card-body p-4">
+                  <h3 className="font-bold text-gray-900 mb-2">Name: {cat.name}</h3>
+                  <div className="space-y-1 text-sm text-gray-600 mb-3">
+                    <p>Age: {cat.age}</p>
+                    <p>Gender: {cat.gender}</p>
+                    <p>Breed: {cat.breed}</p>
+                  </div>
+                  <Link
+                    href={`/adopt/${cat.id}`}
+                    className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 text-center block text-sm"
+                  >
+                    Adopt Now
+                  </Link>
                 </div>
               </div>
-              <div className="card-body p-4">
-                <h3 className="font-bold text-gray-900 mb-2">Name: {cat.name}</h3>
-                <div className="space-y-1 text-sm text-gray-600 mb-3">
-                  <p>Age: {cat.age}</p>
-                  <p>Gender: {cat.gender}</p>
-                  <p>Breed: {cat.breed}</p>
-                </div>
-                <Link
-                  href={`/adopt/${cat.id}`}
-                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 text-center block text-sm"
-                >
-                  Adopt Now
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Next Page Button */}
